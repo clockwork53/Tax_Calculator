@@ -1,9 +1,7 @@
 package com.clockwork53.taxcalculator;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,9 +17,9 @@ public class MainActivity extends AppCompatActivity {
     private EditText Current_Tax_Input;
     private TextView Total_Cost_View;
     private TextView Total_Cost_wTax_View;
-    private BigDecimal Total_Cost,Total_Cost_wTax;
-    private String Symbols_to_Remove_From_Input;
+    private taxCalculator tcInstance = new taxCalculator();
 
+    /*
     private class Cost_Input_Watcher implements TextWatcher {
         private EditText editTextInstance;
         private String Current_Input_Value = "";
@@ -50,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         public void afterTextChanged(Editable s) {
         }
     }
-
+    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,27 +60,23 @@ public class MainActivity extends AppCompatActivity {
         Current_Tax_Input = findViewById(R.id.Current_Tax_Input);
         Current_Cost_Input.setTextLocale(Locale.getDefault());
         Current_Tax_Input.setTextLocale(Locale.getDefault());
-        Symbols_to_Remove_From_Input = String.format("[%s,\\s]",NumberFormat.getCurrencyInstance().getCurrency().getSymbol());
-        Current_Cost_Input.addTextChangedListener(new Cost_Input_Watcher(Current_Cost_Input));
+
+        //Current_Cost_Input.addTextChangedListener(new Cost_Input_Watcher(Current_Cost_Input));
         //Current_Tax_Input.addTextChangedListener(new Cost_Input_Watcher(Current_Tax_Input));
 
         findViewById(R.id.Clear_All).performClick();
     }
 
     public void onAddClick(View view) {
-        BigDecimal Current_Cost = new BigDecimal(Current_Cost_Input.getText().toString().replaceAll(Symbols_to_Remove_From_Input,""));
-        Total_Cost = Total_Cost.add(Current_Cost);
-        Total_Cost_View.setText(Currency_Format.format(Total_Cost));
 
-        BigDecimal Current_Tax = new BigDecimal(Current_Tax_Input.getText().toString()).divide(new BigDecimal("100.0"));
-        BigDecimal Current_Cost_wTax = Current_Cost.add(Current_Cost.multiply(Current_Tax));
-        Total_Cost_wTax = Total_Cost_wTax.add(Current_Cost_wTax);
-        Total_Cost_wTax_View.setText(Currency_Format.format(Total_Cost_wTax));
+        tcInstance.addCurrentToTotal(Current_Cost_Input.getText());
+
+        Total_Cost_View.setText(tcInstance.getTotalCost());
+        Total_Cost_wTax_View.setText(tcInstance.addCurrentToTotalWithTax(Current_Tax_Input.getText()));
 
     }
     public void onClearAllClick(View view) {
-        Total_Cost = BigDecimal.ZERO;
-        Total_Cost_wTax = BigDecimal.ZERO;
+        tcInstance.reset();
         Current_Cost_Input.setText(BigDecimal.ZERO.toString());
         Current_Tax_Input.setText(BigDecimal.ZERO.toString());
         Total_Cost_View.setText(Currency_Format.format(BigDecimal.ZERO));
