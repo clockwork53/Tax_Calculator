@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">TaxCalculator</string>
+    <string name="Cost_Label_mainActivity">Cost :</string>
+    <string name="Tax_Label_mainActivity">VAT :</string>
+    <string name="Cost_Input_mainActivity_Hint">Enter Cost Here</string>
+    <string name="Tax_Input_mainActivity_Hint">Enter VAT Percentage</string>
+    <string name="Add_Cost_Button_mainActivity">Add</string>
+    <string name="Clear_All_Button_mainActivity">Clear All</string>
+</resources>
