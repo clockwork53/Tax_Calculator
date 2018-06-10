@@ -19,36 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView Total_Cost_wTax_View;
     private taxCalculator tcInstance = new taxCalculator();
 
-    /*
-    private class Cost_Input_Watcher implements TextWatcher {
-        private EditText editTextInstance;
-        private String Current_Input_Value = "";
-        public Cost_Input_Watcher(EditText e) {
-            editTextInstance = e;
-        }
 
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if(!s.toString().equals(Current_Input_Value)){
-                editTextInstance.removeTextChangedListener(this);
-
-                String cleanString = s.toString().replaceAll(Symbols_to_Remove_From_Input, "");
-
-                BigDecimal parsed = new BigDecimal(cleanString);
-                String formatted = NumberFormat.getCurrencyInstance().format((parsed.divide(new BigDecimal("100.0"))));
-
-                Current_Input_Value = formatted;
-                editTextInstance.setText(formatted);
-                editTextInstance.setSelection(formatted.length());
-                editTextInstance.addTextChangedListener(this);
-            }
-        }
-
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-        public void afterTextChanged(Editable s) {
-        }
-    }
-    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,11 +29,12 @@ public class MainActivity extends AppCompatActivity {
         Total_Cost_wTax_View = findViewById(R.id.Total_Cost_View_wTax);
         Current_Cost_Input = findViewById(R.id.Current_Cost_Input);
         Current_Tax_Input = findViewById(R.id.Current_Tax_Input);
+
         Current_Cost_Input.setTextLocale(Locale.getDefault());
         Current_Tax_Input.setTextLocale(Locale.getDefault());
 
-        //Current_Cost_Input.addTextChangedListener(new Cost_Input_Watcher(Current_Cost_Input));
-        //Current_Tax_Input.addTextChangedListener(new Cost_Input_Watcher(Current_Tax_Input));
+        Current_Cost_Input.addTextChangedListener(new costInputWatcher(Current_Cost_Input));
+        //Current_Tax_Input.addTextChangedListener(new costInputWatcher(Current_Tax_Input));
 
         findViewById(R.id.Clear_All).performClick();
     }
@@ -77,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
     }
     public void onClearAllClick(View view) {
         tcInstance.reset();
-        Current_Cost_Input.setText(BigDecimal.ZERO.toString());
-        Current_Tax_Input.setText(BigDecimal.ZERO.toString());
+        Current_Cost_Input.setText(Currency_Format.format(BigDecimal.ZERO.toString()));
+        Current_Tax_Input.setText(Currency_Format.format(BigDecimal.ZERO.toString()));
         Total_Cost_View.setText(Currency_Format.format(BigDecimal.ZERO));
         Total_Cost_wTax_View.setText(Currency_Format.format(BigDecimal.ZERO));
     }
