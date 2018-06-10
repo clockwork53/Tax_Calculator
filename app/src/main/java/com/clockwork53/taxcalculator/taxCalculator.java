@@ -41,7 +41,11 @@ public class taxCalculator
 
     public String addCurrentToTotalWithTax(Editable a)
     {
-        currentTax = new BigDecimal(a.toString());
+        try {
+            currentTax = new BigDecimal(a.toString());
+        } catch (NumberFormatException e) {
+            e.getMessage();
+        }
         currentTax = currentTax.divide(new BigDecimal("100.0"));
         currentCostWithTax = currentCost.add(currentCost.multiply(currentTax));
         totalCostWithTax = totalCostWithTax.add(currentCostWithTax);

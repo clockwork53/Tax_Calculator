@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
     }
     public void onClearAllClick(View view) {
         tcInstance.reset();
-        Current_Cost_Input.setText(Currency_Format.format(BigDecimal.ZERO.toString()));
-        Current_Tax_Input.setText(Currency_Format.format(BigDecimal.ZERO.toString()));
+        Current_Cost_Input.setText(BigDecimal.ZERO.toString());
+        Current_Tax_Input.setText(BigDecimal.ZERO.toString());
         Total_Cost_View.setText(Currency_Format.format(BigDecimal.ZERO));
         Total_Cost_wTax_View.setText(Currency_Format.format(BigDecimal.ZERO));
     }
