@@ -6,18 +6,20 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class taxCalculator
-{
-    private NumberFormat Currency_Format;
-    private String Symbols_to_Remove_From_Input;
-    private BigDecimal totalCost,currentCost,currentTax
-                       ,currentCostWithTax,totalCostWithTax;
+class taxCalculator {
+    private final NumberFormat Currency_Format;
+    private final String Symbols_to_Remove_From_Input;
+    private BigDecimal totalCost;
+    private BigDecimal currentCost;
+    private BigDecimal currentTax;
+    private BigDecimal totalCostWithTax;
 
     taxCalculator()
     {
         Symbols_to_Remove_From_Input = String.format("[%s,\\s]", NumberFormat.getCurrencyInstance()
                 .getCurrency().getSymbol());
         Currency_Format = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        reset();
     }
     public String getTotalCost()
     {
@@ -33,9 +35,9 @@ public class taxCalculator
 
     public void addCurrentToTotal(Editable a)
     {
-        String temp;
-        temp = a.toString().replaceAll(Symbols_to_Remove_From_Input,"");
-        currentCost =new BigDecimal(temp);
+        String temp = a.toString();
+        temp = temp.replaceAll(Symbols_to_Remove_From_Input, "");
+        currentCost = new BigDecimal(temp);
         totalCost = totalCost.add(currentCost);
     }
 
@@ -47,7 +49,7 @@ public class taxCalculator
             e.getMessage();
         }
         currentTax = currentTax.divide(new BigDecimal("100.0"));
-        currentCostWithTax = currentCost.add(currentCost.multiply(currentTax));
+        BigDecimal currentCostWithTax = currentCost.add(currentCost.multiply(currentTax));
         totalCostWithTax = totalCostWithTax.add(currentCostWithTax);
         return Currency_Format.format(totalCostWithTax);
     }

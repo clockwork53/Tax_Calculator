@@ -12,12 +12,12 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private NumberFormat Currency_Format = NumberFormat.getCurrencyInstance(Locale.getDefault());
+    private final NumberFormat Currency_Format = NumberFormat.getCurrencyInstance(Locale.getDefault());
     private EditText Current_Cost_Input;
     private EditText Current_Tax_Input;
     private TextView Total_Cost_View;
     private TextView Total_Cost_wTax_View;
-    private taxCalculator tcInstance = new taxCalculator();
+    private final taxCalculator tcInstance = new taxCalculator();
 
 
     @Override
