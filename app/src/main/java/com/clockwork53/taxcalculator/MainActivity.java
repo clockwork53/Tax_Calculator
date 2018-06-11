@@ -1,5 +1,6 @@
 package com.clockwork53.taxcalculator;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
         Total_Cost_wTax_View.setText(tcInstance.addCurrentToTotalWithTax(Current_Tax_Input.getText()));
 
     }
+
+    @SuppressLint("SetTextI18n")
     public void onClearAllClick(View view) {
         tcInstance.reset();
         Current_Cost_Input.setText(BigDecimal.ZERO.toString());
