@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         Current_Tax_Input.setTextLocale(Locale.getDefault());
 
         Current_Cost_Input.addTextChangedListener(new costInputWatcher(Current_Cost_Input));
-        //Current_Tax_Input.addTextChangedListener(new costInputWatcher(Current_Tax_Input));
+        Current_Tax_Input.addTextChangedListener(new taxInputWatcher(Current_Tax_Input));
 
         findViewById(R.id.Clear_All).performClick();
     }

@@ -8,12 +8,11 @@ import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 
-class costInputWatcher implements TextWatcher {
-    private final String Symbols_to_Remove_From_Input = String.format("[%s,\\s,.,\\,]", NumberFormat
-            .getCurrencyInstance().getCurrency().getSymbol());
+class taxInputWatcher implements TextWatcher {
+    private final String Symbols_to_Remove_From_Input = String.format("[%%,\\s,.,\\,]");
     private final WeakReference<EditText> editTextWeakReference;
 
-    public costInputWatcher(EditText editText) {
+    taxInputWatcher(EditText editText) {
         editTextWeakReference = new WeakReference<>(editText);
     }
 
@@ -35,11 +34,10 @@ class costInputWatcher implements TextWatcher {
         String cleanString = s.replaceAll(Symbols_to_Remove_From_Input, "");
 
         BigDecimal parsed = new BigDecimal(cleanString).setScale(2, BigDecimal.ROUND_FLOOR).divide(new BigDecimal(100), BigDecimal.ROUND_FLOOR);
-        String formatted = NumberFormat.getCurrencyInstance().format(parsed);
+        String formatted = NumberFormat.getPercentInstance().format(parsed);
         editText.setText(formatted);
         editText.setSelection(formatted.length());
 
         editText.addTextChangedListener(this);
     }
-
 }

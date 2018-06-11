@@ -16,7 +16,7 @@ class taxCalculator {
 
     taxCalculator()
     {
-        Symbols_to_Remove_From_Input = String.format("[%s,\\s]", NumberFormat.getCurrencyInstance()
+        Symbols_to_Remove_From_Input = String.format("[%s,\\s,%%]", NumberFormat.getCurrencyInstance()
                 .getCurrency().getSymbol());
         Currency_Format = NumberFormat.getCurrencyInstance(Locale.getDefault());
         reset();
@@ -47,14 +47,20 @@ class taxCalculator {
 
     public String addCurrentToTotalWithTax(Editable a)
     {
+        String temp = a.toString();
+        temp = temp.replaceAll(Symbols_to_Remove_From_Input, "");
         try {
-            currentTax = new BigDecimal(a.toString());
+            currentTax = new BigDecimal(temp);
+            if (!currentTax.equals(new BigDecimal("100")))
+                currentTax = currentTax.divide(new BigDecimal("100"), BigDecimal.ROUND_FLOOR);
+            else
+                currentTax = BigDecimal.ONE;
+            BigDecimal currentCostWithTax = currentCost.add(currentCost.multiply(currentTax));
+            totalCostWithTax = totalCostWithTax.add(currentCostWithTax);
         } catch (NumberFormatException e) {
             e.getMessage();
         }
-        currentTax = currentTax.divide(new BigDecimal("100.0"), BigDecimal.ROUND_FLOOR);
-        BigDecimal currentCostWithTax = currentCost.add(currentCost.multiply(currentTax));
-        totalCostWithTax = totalCostWithTax.add(currentCostWithTax);
+
         return Currency_Format.format(totalCostWithTax);
     }
 
