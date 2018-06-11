@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 
 class taxInputWatcher implements TextWatcher {
-    private final String Symbols_to_Remove_From_Input = String.format("[%%,\\s,.,\\,]");
     private final WeakReference<EditText> editTextWeakReference;
 
     taxInputWatcher(EditText editText) {
@@ -31,7 +30,8 @@ class taxInputWatcher implements TextWatcher {
         String s = editable.toString();
         if (s.isEmpty()) return;
         editText.removeTextChangedListener(this);
-        String cleanString = s.replaceAll(Symbols_to_Remove_From_Input, "");
+        String symbols_to_Remove_From_Input = "[%,.]";
+        String cleanString = s.replaceAll(symbols_to_Remove_From_Input, "");
 
         BigDecimal parsed = new BigDecimal(cleanString).setScale(2, BigDecimal.ROUND_FLOOR).divide(new BigDecimal(100), BigDecimal.ROUND_FLOOR);
         String formatted = NumberFormat.getPercentInstance().format(parsed);
