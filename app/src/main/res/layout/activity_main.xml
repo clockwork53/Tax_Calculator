@@ -25,6 +25,7 @@
         android:layout_marginStart="8dp"
         android:ems="10"
         android:hint="@string/Cost_Input_mainActivity_Hint"
+        android:cursorVisible="false"
         android:inputType="number|numberDecimal"
         android:singleLine="false"
         android:textSize="14sp"
