@@ -52,7 +52,7 @@ class taxCalculator {
         try {
             currentTax = new BigDecimal(temp);
             if (!currentTax.equals(new BigDecimal("100")))
-                currentTax = currentTax.divide(new BigDecimal("100"), BigDecimal.ROUND_FLOOR);
+                currentTax = currentTax.divide(new BigDecimal("100"), 2, BigDecimal.ROUND_FLOOR);
             else
                 currentTax = BigDecimal.ONE;
             BigDecimal currentCostWithTax = currentCost.add(currentCost.multiply(currentTax));
