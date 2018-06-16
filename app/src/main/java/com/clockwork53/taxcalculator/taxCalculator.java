@@ -1,12 +1,14 @@
 package com.clockwork53.taxcalculator;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.Editable;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-class taxCalculator {
+class taxCalculator implements Parcelable {
     private final NumberFormat Currency_Format;
     private final String Symbols_to_Remove_From_Input;
     private BigDecimal totalCost;
@@ -14,27 +16,76 @@ class taxCalculator {
     private BigDecimal currentTax;
     private BigDecimal totalCostWithTax;
 
-    taxCalculator()
-    {
+    public static final Creator<taxCalculator> CREATOR = new Creator<taxCalculator>() {
+        @Override
+        public taxCalculator createFromParcel(Parcel in) {
+            return new taxCalculator(in);
+        }
+
+        @Override
+        public taxCalculator[] newArray(int size) {
+            return new taxCalculator[size];
+        }
+    };
+
+    /**
+     * Default Constructor
+     */
+    taxCalculator() {
         Symbols_to_Remove_From_Input = String.format("[%s,\\s,%%]", NumberFormat.getCurrencyInstance()
                 .getCurrency().getSymbol());
         Currency_Format = NumberFormat.getCurrencyInstance(Locale.getDefault());
         reset();
     }
-    public String getTotalCost()
-    {
+
+    /**
+     * Constructor used for restoring state from a bundle
+     *
+     * @param in
+     */
+    taxCalculator(Parcel in) {
+        Currency_Format = (NumberFormat) in.readValue(NumberFormat.class.getClassLoader());
+        Symbols_to_Remove_From_Input = in.readString();
+        totalCost = (BigDecimal) in.readValue(BigDecimal.class.getClassLoader());
+        currentCost = (BigDecimal) in.readValue(BigDecimal.class.getClassLoader());
+        currentTax = (BigDecimal) in.readValue(BigDecimal.class.getClassLoader());
+        totalCostWithTax = (BigDecimal) in.readValue(BigDecimal.class.getClassLoader());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+
+        dest.writeValue(Currency_Format);
+        dest.writeString(Symbols_to_Remove_From_Input);
+        dest.writeValue(totalCost);
+        dest.writeValue(currentCost);
+        dest.writeValue(currentTax);
+        dest.writeValue(totalCostWithTax);
+    }
+
+    /**
+     * Main body of class starts from here
+     *
+     * @return
+     */
+    public String getTotalCost() {
         return Currency_Format.format(totalCost);
     }
-    public void reset()
-    {
+
+    public void reset() {
         totalCost = BigDecimal.ZERO;
-        currentCost =BigDecimal.ZERO;
+        currentCost = BigDecimal.ZERO;
         currentTax = BigDecimal.ZERO;
         totalCostWithTax = BigDecimal.ZERO;
     }
 
-    public void addCurrentToTotal(Editable a)
-    {
+    public void addCurrentToTotal(Editable a) {
         String temp = a.toString();
         temp = temp.replaceAll(Symbols_to_Remove_From_Input, "");
         try {
@@ -45,8 +96,7 @@ class taxCalculator {
         }
     }
 
-    public String addCurrentToTotalWithTax(Editable a)
-    {
+    public String addCurrentToTotalWithTax(Editable a) {
         String temp = a.toString();
         temp = temp.replaceAll(Symbols_to_Remove_From_Input, "");
         try {
@@ -63,6 +113,4 @@ class taxCalculator {
 
         return Currency_Format.format(totalCostWithTax);
     }
-
-
 }

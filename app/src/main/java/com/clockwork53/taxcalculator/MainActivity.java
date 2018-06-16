@@ -18,8 +18,33 @@ public class MainActivity extends AppCompatActivity {
     private EditText Current_Tax_Input;
     private TextView Total_Cost_View;
     private TextView Total_Cost_wTax_View;
-    private final taxCalculator tcInstance = new taxCalculator();
+    private Boolean hasDoneClearAll = false;
+    private taxCalculator tcInstance = new taxCalculator();
 
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        // Save state to the savedInstanceState
+        savedInstanceState.putString("Current_Cost_Input", Current_Cost_Input.getText().toString());
+        savedInstanceState.putString("Current_Tax_Input", Current_Tax_Input.getText().toString());
+        savedInstanceState.putString("Total_Cost_wTax_View", Total_Cost_wTax_View.getText().toString());
+        savedInstanceState.putString("Total_Cost_View", Total_Cost_View.getText().toString());
+        savedInstanceState.putBoolean("hasDoneClearAll", hasDoneClearAll);
+        savedInstanceState.putParcelable("tcInstance", tcInstance);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        // Restore state from savedInstanceState
+        Current_Cost_Input.setText(savedInstanceState.getString("Current_Cost_Input"));
+        Current_Tax_Input.setText(savedInstanceState.getString("Current_Tax_Input"));
+        Total_Cost_View.setText(savedInstanceState.getString("Total_Cost_View"));
+        Total_Cost_wTax_View.setText(savedInstanceState.getString("Total_Cost_wTax_View"));
+        hasDoneClearAll = savedInstanceState.getBoolean("hasDoneClearAll");
+        tcInstance = savedInstanceState.getParcelable("tcInstance");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +62,10 @@ public class MainActivity extends AppCompatActivity {
         Current_Cost_Input.addTextChangedListener(new costInputWatcher(Current_Cost_Input));
         Current_Tax_Input.addTextChangedListener(new taxInputWatcher(Current_Tax_Input));
 
-        findViewById(R.id.Clear_All).performClick();
+        if (!hasDoneClearAll) {
+            findViewById(R.id.Clear_All).performClick();
+            hasDoneClearAll = true;
+        }
     }
 
     public void onAddClick(View view) {
